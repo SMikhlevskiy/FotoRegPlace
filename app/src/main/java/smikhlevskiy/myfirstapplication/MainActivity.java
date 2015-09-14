@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                
+
         // --------Get Function from ActivitySelectFunction--------------
         if (data != null) {
 

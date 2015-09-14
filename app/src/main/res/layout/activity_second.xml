@@ -30,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editTextDescription"
+        android:gravity="top"
         android:layout_weight="0.60"
         android:hint="Description" />
 </LinearLayout>
