@@ -3,4 +3,7 @@
 
     <string name="mainBanner">Talk to me!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_out_text">SecondActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

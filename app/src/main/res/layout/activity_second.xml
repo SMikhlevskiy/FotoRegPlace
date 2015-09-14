@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    tools:context="smikhlevskiy.myfirstapplication.SecondActivity"
+
+    android:weightSum="1">
+
+
+    <EditText
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextAddress"
+        android:layout_gravity="center_horizontal"
+        android:hint="Address" />
+
+    <EditText
+        android:paddingTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTime"
+        android:hint="Time" />
+
+    <EditText
+        android:paddingTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextDescription"
+        android:layout_weight="0.60"
+        android:hint="Description" />
+</LinearLayout>
