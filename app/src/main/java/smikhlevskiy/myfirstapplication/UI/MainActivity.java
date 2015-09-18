@@ -1,8 +1,10 @@
 package smikhlevskiy.myfirstapplication.UI;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,74 +19,49 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.model.MainActivityInterface;
 
-public class MainActivity extends ActionBarActivity {
-    private ArrayList<String> listItemsMessage = new ArrayList<String>();
-    private ArrayAdapter<String> adapter;
-    private Button btnSend;
-    private EditText editTextMessage;
-    private ListView messageListView;
-    private Button buttonRegUser;
-    private TextView textViewUser;
-    private EditText editTextUser;
+public class MainActivity extends AppCompatActivity implements MainActivityInterface {
+
+
+
+    Fragment fragmentAddItem;
+    Fragment fragList;
+
     //private
+    public void sendListItem(String s) {
+        ((FragmentList) fragList).addMessage(MainActivity.this, s);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.MainFrame, fragList);
+        ft.commit();
+
+    }
+
+    public void showFragmentAddItem(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.MainFrame, fragmentAddItem);
+        ft.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("MainActivity", "onCreate:Begin");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        Log.i("MainActivity", "Hello");
-        Log.d("MainActivity", "Hello");
-        Log.e("MainActivity", "Hello");
-
-        //Toast a=Toast.makeText(this,"Hello!!",Toast.LENGTH_LONG);
-        //a.setGravity();
-        //Toast. s .setGravity(Gravity.LEFT)
 
 
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                listItemsMessage);
-        messageListView = (ListView) findViewById(R.id.listViewMessages);
-        messageListView.setAdapter(adapter);
 
-        btnSend = (Button) findViewById(R.id.buttonSendMessage);
-        editTextMessage = (EditText) findViewById(R.id.editTextMessage);
-        buttonRegUser = (Button) findViewById(R.id.buttonRegUser);
-        textViewUser = (TextView) findViewById(R.id.textViewUser);
-        editTextUser = (EditText) findViewById(R.id.editTextUser);
+        fragmentAddItem = new FragmentAddItem();
+        fragList = new FragmentList();
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
-
-                                           if (editTextMessage.getText().toString().trim().length() == 0) {
-                                               Toast.makeText(MainActivity.this, "Please, input message's text", Toast.LENGTH_LONG).show();
-                                               return;
-                                           }
-                                           adapter.add(textViewUser.getText().toString() + ": " + editTextMessage.getText().toString());
-
-                                           adapter.notifyDataSetChanged();
-                                           editTextMessage.setText("");
-                                           messageListView.setSelection(adapter.getCount() - 1);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.MainFrame, fragList);
+        ft.commit();
 
 
-                                       }
-                                   }
-        );
-
-
-        buttonRegUser.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //textViewUser.setText();
-                textViewUser.setText(editTextUser.getText().toString());
-            }
-        });
-
+        Log.i("MainActivity", "onCreate:End");
     }
 
     @Override
@@ -95,43 +72,21 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
 
-            case R.id.plus: {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                startActivityForResult(intent, 0);
+            case R.id.ok: {
+                sendListItem("aaa");
+
 
                 break;
             }
+            case R.id.plus: {
+                showFragmentAddItem();
+                break;
+            }
+
         }
         return true;
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        // --------Get Function from ActivitySelectFunction--------------
-        if (data != null) {
-
-            /*if (requestCode == 1) */
-            {
-                adapter.add(data.getStringExtra("address") + ", " +
-                        data.getStringExtra("time") + ", " +
-                        data.getStringExtra("description"));
-
-                adapter.notifyDataSetChanged();
-                editTextMessage.setText("");
-                messageListView.setSelection(adapter.getCount() - 1);
-            }
-        }
-                /*
-                editTextFunction.setText(editTextFunction.getText()
-                        + formulaDrawController.formFunctionInsert(data.getStringExtra("name").toLowerCase()));
-                        */
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
 
 }

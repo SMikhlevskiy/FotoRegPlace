@@ -16,10 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.SecondActivity"
-            android:label="@string/title_activity_out_text" >
-        </activity>
     </application>
 
 </manifest>
