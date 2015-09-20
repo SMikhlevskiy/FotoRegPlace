@@ -14,51 +14,60 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="16dp"
-        android:weightSum="1"
+        android:weightSum="1">
 
-        tools:context="smikhlevskiy.myfirstapplication.UI.SecondActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/sizeFoto"
+            android:layout_height="@dimen/sizeFoto"
             android:layout_gravity="center"
-            android:text="Place Name"/>
+            android:background="@color/dark_blue"/>
 
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_marginLeft="10dp"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="PlaceName" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:orientation="horizontal">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_gravity="center"
-            android:text="Address"/>
-        <EditText
-            android:id="@+id/editTextAddress"
-            android:layout_marginLeft="10dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/placeName"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:hint="@string/placeName" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="Address" />
-    </LinearLayout>
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/Address"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:hint="@string/Address" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,25 +76,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_gravity="center"
-                android:text="Date"/>
+                android:text="@string/Date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/editTextDate"
                 android:layout_width="120dp"
-                android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:hint="Date"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:hint="@string/Date"
                 android:paddingTop="16dp" />
 
             <Button
                 android:id="@+id/ChangeDate"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="change" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="@string/Change" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,39 +105,49 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_gravity="center"
-                android:text="Time"/>
+                android:text="@string/Time"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
             <EditText
                 android:id="@+id/editTextTime"
                 android:layout_width="120dp"
-                android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
-                android:hint="Time"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:hint="@string/Time"
                 android:paddingTop="16dp" />
 
             <Button
                 android:id="@+id/ChangeTime"
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="change" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="@string/Change" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.60"
-            android:gravity="top"
-            android:hint="Description"
-            android:paddingTop="16dp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:text="@string/Comment"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_weight="0.60"
+                android:gravity="top"
+                android:hint="@string/Comment"
+                android:paddingTop="16dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

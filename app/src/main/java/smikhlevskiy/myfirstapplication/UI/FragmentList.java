@@ -17,7 +17,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.adapters.AdapterRegPlaceList;
 import smikhlevskiy.myfirstapplication.model.MainActivityInterface;
+import smikhlevskiy.myfirstapplication.model.RegPlaceItemData;
 
 public class FragmentList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -25,6 +27,9 @@ public class FragmentList extends Fragment {
     private Activity masterActivity;
 
     private ArrayList<String> listItemsMessage = new ArrayList<String>();
+
+    AdapterRegPlaceList adapterRegPlaceList=new AdapterRegPlaceList();
+
     private ArrayAdapter<String> adapter;
     private ListView messageListView;
 
@@ -38,10 +43,16 @@ public class FragmentList extends Fragment {
 
     public void addMessage(Context context, String s) {
 
-        Toast.makeText(context, s, Toast.LENGTH_LONG);
+        //Toast.makeText(context, s, Toast.LENGTH_LONG);
         adapter.add(s);
 
-        adapter.notifyDataSetChanged();
+        RegPlaceItemData itemData=new RegPlaceItemData();
+        itemData.setName("aaaa");
+        adapterRegPlaceList.add(itemData);
+        adapterRegPlaceList.notifyDataSetChanged();
+
+
+        //adapter.notifyDataSetChanged();
         messageListView.setSelection(adapter.getCount() - 1);
 
     }
@@ -59,7 +70,9 @@ public class FragmentList extends Fragment {
                 listItemsMessage);
 
         messageListView = (ListView) v.findViewById(R.id.fListMessages);
-        messageListView.setAdapter(adapter);
+
+        adapterRegPlaceList.setContext(v.getContext());
+        messageListView.setAdapter(adapterRegPlaceList);
 
 
         return v;
