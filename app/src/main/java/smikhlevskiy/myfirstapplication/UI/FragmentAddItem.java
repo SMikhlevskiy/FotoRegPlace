@@ -1,17 +1,28 @@
 package smikhlevskiy.myfirstapplication.UI;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -21,21 +32,29 @@ import smikhlevskiy.myfirstapplication.model.RegPlaceItemData;
 public class FragmentAddItem extends Fragment {
 
 
-    private Activity masterActivity;
+    public Activity masterActivity;
     private ImageView imageViewFoto;
-    private String fotoPath;
-
-    EditText editTextName;
-    EditText editTextAddress;
 
 
-    EditText editTextTime;
-    EditText editTextDate;
-    EditText editTextComment;
+    private EditText editTextName;
+    private EditText editTextAddress;
 
-    Button changeDate;
-    Button changeTime;
 
+    private EditText editTextTime;
+    private EditText editTextDate;
+    private EditText editTextComment;
+
+    private Button changeDate;
+    private Button changeTime;
+
+
+    private Bitmap bitmap;
+
+    public void setBitmap(Bitmap bitmap) {
+
+        this.bitmap = bitmap;
+        imageViewFoto.setImageBitmap(bitmap);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +81,6 @@ public class FragmentAddItem extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        fotoPath = "";
 
         masterActivity = activity;
 
@@ -79,6 +97,8 @@ public class FragmentAddItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_item, null);
+
+
         imageViewFoto = (ImageView) v.findViewById(R.id.imageViewFoto);
 
         editTextName = (EditText) v.findViewById(R.id.editTextName);
@@ -94,10 +114,62 @@ public class FragmentAddItem extends Fragment {
 
         editTextDate.setText(nowDate());
         editTextTime.setText(nowTime());
+        bitmap = null;
+        imageViewFoto.setOnClickListener(new View.OnClickListener() {
+                                             public void onClick(View v) {
+                                                 Intent intent = new Intent();
+                                                 intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                                                 startActivityForResult(intent, 1);
+
+                                             }
+                                         }
+        );
+        changeTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        editTextTime.setText(hourOfDay+":"+minute+":00");
+                    }
+
+
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
+        changeDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                editTextDate.setText(dayOfMonth+"/"+monthOfYear+"/"+year);
+                            }
+                        }, mYear, mMonth, mDay);
+                dialog.show();
+            }
+        });
 
 
         return v;
     }
+
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragadditem, menu);
@@ -110,7 +182,8 @@ public class FragmentAddItem extends Fragment {
         regPlaceItemData.setName(editTextName.getText().toString());
         regPlaceItemData.setAddress(editTextAddress.getText().toString());
         regPlaceItemData.setComment(editTextComment.getText().toString());
-        regPlaceItemData.setFileName(fotoPath);
+        if (bitmap != null)
+            regPlaceItemData.setBitmap(bitmap);
 
         regPlaceItemData.setDate(editTextDate.getText().toString());
         regPlaceItemData.setTime(editTextTime.getText().toString());
@@ -119,5 +192,33 @@ public class FragmentAddItem extends Fragment {
         return regPlaceItemData;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent intent) {
+
+        //Toast.makeText(MainActivity.this, "1", Toast.LENGTH_LONG).show();
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (intent == null) {
+                editTextComment.setText("intent is null");
+            } else {
+                editTextComment.setText("intent is ok");
+                Bundle bndl = intent.getExtras();
+                if (bndl != null) {
+                    Object obj = intent.getExtras().get("data");
+                    if (obj instanceof Bitmap) {
+                        Bitmap bitmap = (Bitmap) obj;
+
+                        setBitmap(bitmap);
+                    }
+                }
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            editTextComment.setText("cancel");
+
+        }
+
+
+    }
 
 }

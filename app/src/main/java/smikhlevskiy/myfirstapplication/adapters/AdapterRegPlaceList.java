@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -56,6 +57,8 @@ public class AdapterRegPlaceList extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.adress)).setText(itemData.getAddress());
             ((TextView) convertView.findViewById(R.id.regPlaceItemName)).setText(itemData.getName());
             ((TextView) convertView.findViewById(R.id.date)).setText(itemData.getDate()+" "+itemData.getTime());
+            if (itemData.getBitmap()!=null)
+            ((ImageView) convertView.findViewById(R.id.imageFoto)).setImageBitmap(itemData.getBitmap());
 
 
         }

@@ -1,5 +1,7 @@
 package smikhlevskiy.myfirstapplication.model;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 /**
@@ -15,7 +17,17 @@ public class RegPlaceItemData {
     private String date;
     private String time;
     private String comment;
-    private String fileName;
+    private Bitmap bitmap=null;
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+
 
     public String getAddress() {
         return address;
@@ -33,9 +45,7 @@ public class RegPlaceItemData {
         return comment;
     }
 
-    public String getFileName() {
-        return fileName;
-    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -57,7 +67,5 @@ public class RegPlaceItemData {
         this.comment = comment;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+
 }

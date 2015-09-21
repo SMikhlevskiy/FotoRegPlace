@@ -47,6 +47,7 @@ public class FragmentList extends Fragment {
 
 
         //adapter.notifyDataSetChanged();
+
         messageListView.setSelection(adapterRegPlaceList.getCount() - 1);
 
 
