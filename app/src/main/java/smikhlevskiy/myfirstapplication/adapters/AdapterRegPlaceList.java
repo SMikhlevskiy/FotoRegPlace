@@ -55,6 +55,7 @@ public class AdapterRegPlaceList extends BaseAdapter {
             RegPlaceItemData itemData=regPlaceList.get(position);
             ((TextView) convertView.findViewById(R.id.adress)).setText(itemData.getAddress());
             ((TextView) convertView.findViewById(R.id.regPlaceItemName)).setText(itemData.getName());
+            ((TextView) convertView.findViewById(R.id.date)).setText(itemData.getDate()+" "+itemData.getTime());
 
 
         }

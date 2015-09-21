@@ -12,7 +12,8 @@ public class RegPlaceItemData {
 
     private String name;
     private String address;
-    private Date date;
+    private String date;
+    private String time;
     private String comment;
     private String fileName;
 
@@ -20,8 +21,12 @@ public class RegPlaceItemData {
         return address;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public String getComment() {
@@ -40,8 +45,12 @@ public class RegPlaceItemData {
         this.address = address;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public void setComment(String comment) {
