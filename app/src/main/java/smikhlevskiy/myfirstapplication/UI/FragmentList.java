@@ -8,15 +8,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
 import smikhlevskiy.myfirstapplication.adapters.AdapterRegPlaceList;
-import smikhlevskiy.myfirstapplication.model.RegPlaceItemData;
+import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 public class FragmentList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -37,7 +33,7 @@ public class FragmentList extends Fragment {
 
     }
 
-    public void addMessage(RegPlaceItemData itemData) {
+    public void addMessage(RegPlaceItem itemData) {
 
         //Toast.makeText(context, s, Toast.LENGTH_LONG);
 

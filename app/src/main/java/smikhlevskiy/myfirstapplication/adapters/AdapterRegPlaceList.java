@@ -11,13 +11,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
-import smikhlevskiy.myfirstapplication.model.RegPlaceItemData;
+import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 /**
  * Created by tcont98 on 21-Sep-15.
  */
 public class AdapterRegPlaceList extends BaseAdapter {
-    private ArrayList <RegPlaceItemData>regPlaceList = new ArrayList();
+
+    public void setRegPlaceList(ArrayList<RegPlaceItem> regPlaceList) {
+        this.regPlaceList = regPlaceList;
+    }
+
+    private ArrayList <RegPlaceItem>regPlaceList = new ArrayList();
 
 
     private Context context;
@@ -27,7 +32,7 @@ public class AdapterRegPlaceList extends BaseAdapter {
         this.context = context;
     }
 
-    public void add(RegPlaceItemData itemData) {
+    public void add(RegPlaceItem itemData) {
         regPlaceList.add(itemData);
     }
 
@@ -53,7 +58,7 @@ public class AdapterRegPlaceList extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = lInflater.inflate(R.layout.menu_regplace_item, parent, false);
-            RegPlaceItemData itemData=regPlaceList.get(position);
+            RegPlaceItem itemData=regPlaceList.get(position);
             ((TextView) convertView.findViewById(R.id.adress)).setText(itemData.getAddress());
             ((TextView) convertView.findViewById(R.id.regPlaceItemName)).setText(itemData.getName());
             ((TextView) convertView.findViewById(R.id.date)).setText(itemData.getDate()+" "+itemData.getTime());

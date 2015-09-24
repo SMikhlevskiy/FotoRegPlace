@@ -12,13 +12,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.model.RegPlaceDB;
+import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 public class MainActivity extends AppCompatActivity {
 
 
     Fragment fragmentAddItem;
     Fragment fragList;
-
+    RegPlaceDB regPlaceDB;
 
     public void showFragmentAddItem() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -46,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.MainFrame, fragList);
         ft.commit();
-
-
+        Log.i("MainActivity", "Create DB");
+        regPlaceDB=new RegPlaceDB(this,"frpdb",null,1);
+        ((FragmentList)fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
         Log.i("MainActivity", "onCreate:End");
     }
 
@@ -62,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.ok: {
+                RegPlaceItem rpi=((FragmentAddItem) fragmentAddItem).getResult();
+                regPlaceDB.SaveItem(rpi);
+                ((FragmentList) fragList).addMessage(rpi);
 
-                ((FragmentList) fragList).addMessage(((FragmentAddItem) fragmentAddItem).getResult());
+
                 showFragmentList();
 
                 break;

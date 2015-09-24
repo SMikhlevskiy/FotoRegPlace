@@ -5,10 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,14 +18,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import smikhlevskiy.myfirstapplication.R;
-import smikhlevskiy.myfirstapplication.model.RegPlaceItemData;
+import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 public class FragmentAddItem extends Fragment {
 
@@ -176,20 +172,20 @@ public class FragmentAddItem extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    public RegPlaceItemData getResult() {
-        RegPlaceItemData regPlaceItemData = new RegPlaceItemData();
+    public RegPlaceItem getResult() {
+        RegPlaceItem regPlaceItem = new RegPlaceItem();
 
-        regPlaceItemData.setName(editTextName.getText().toString());
-        regPlaceItemData.setAddress(editTextAddress.getText().toString());
-        regPlaceItemData.setComment(editTextComment.getText().toString());
+        regPlaceItem.setName(editTextName.getText().toString());
+        regPlaceItem.setAddress(editTextAddress.getText().toString());
+        regPlaceItem.setComment(editTextComment.getText().toString());
         if (bitmap != null)
-            regPlaceItemData.setBitmap(bitmap);
+            regPlaceItem.setBitmap(bitmap);
 
-        regPlaceItemData.setDate(editTextDate.getText().toString());
-        regPlaceItemData.setTime(editTextTime.getText().toString());
+        regPlaceItem.setDate(editTextDate.getText().toString());
+        regPlaceItem.setTime(editTextTime.getText().toString());
 
 
-        return regPlaceItemData;
+        return regPlaceItem;
     }
 
     @Override
@@ -200,9 +196,9 @@ public class FragmentAddItem extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
 
             if (intent == null) {
-                editTextComment.setText("intent is null");
+
             } else {
-                editTextComment.setText("intent is ok");
+
                 Bundle bndl = intent.getExtras();
                 if (bndl != null) {
                     Object obj = intent.getExtras().get("data");
