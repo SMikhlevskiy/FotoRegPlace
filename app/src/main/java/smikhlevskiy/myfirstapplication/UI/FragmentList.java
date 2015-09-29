@@ -3,15 +3,18 @@ package smikhlevskiy.myfirstapplication.UI;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import smikhlevskiy.myfirstapplication.R;
 import smikhlevskiy.myfirstapplication.adapters.AdapterRegPlaceList;
+import smikhlevskiy.myfirstapplication.model.InterfaceMainActivity;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 public class FragmentList extends Fragment {
@@ -61,6 +64,15 @@ public class FragmentList extends Fragment {
 
         adapterRegPlaceList.setContext(v.getContext());
         messageListView.setAdapter(adapterRegPlaceList);
+
+        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.i("MainActivity", "itemClick: position = " + position + ", id = "
+                        + ((RegPlaceItem)adapterRegPlaceList.getItem(position)).getId());
+                ((InterfaceMainActivity) masterActivity).showFragmentAddItem((RegPlaceItem)adapterRegPlaceList.getItem(position));
+            }
+        });
 
 
         return v;

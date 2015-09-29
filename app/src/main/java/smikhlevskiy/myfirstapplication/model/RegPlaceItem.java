@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by tcont98 on 15-Sep-15.
  */
 public class RegPlaceItem {
-    public static final String TABLE_NAME = "rpitems";
+    public static final String TABLE_NAME = "itemsrpi";
     public static final String KEY_NAME = "name";
     public static final String KEY_ID = "id";
     public static final String KEY_ADDRESS = "address";
@@ -16,6 +16,7 @@ public class RegPlaceItem {
     public static final String KEY_TIME = "time";
     public static final String KEY_COMMENT = "comment";
     public static final String KEY_BITMAP = "bitmap";
+    public static final String KEY_COUNTRY = "country";
 
 
     public String getName() {
@@ -28,6 +29,11 @@ public class RegPlaceItem {
     private String address;
     private String date;
     private String time;
+
+
+
+
+    private String country;
     private String comment;
     private Bitmap bitmap = null;
 
@@ -84,5 +90,13 @@ public class RegPlaceItem {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

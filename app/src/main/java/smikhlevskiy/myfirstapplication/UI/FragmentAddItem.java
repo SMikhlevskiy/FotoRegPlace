@@ -13,16 +13,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 public class FragmentAddItem extends Fragment {
@@ -42,10 +45,11 @@ public class FragmentAddItem extends Fragment {
 
     private Button changeDate;
     private Button changeTime;
+    private Spinner spinnerCountrys;
 
 
     private Bitmap bitmap;
-
+    private RegPlaceItem regPlaceItem=null;
     public void setBitmap(Bitmap bitmap) {
 
         this.bitmap = bitmap;
@@ -58,20 +62,6 @@ public class FragmentAddItem extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public static final String DATE_FORMAT_NOW = "dd-MM-yyyy";
-    public static final String TIME_FORMAT_NOW = "HH:mm:ss";
-
-    public String nowDate() {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
-        return sdf.format(cal.getTime());
-    }
-
-    public String nowTime() {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT_NOW);
-        return sdf.format(cal.getTime());
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -95,6 +85,23 @@ public class FragmentAddItem extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_item, null);
 
 
+        spinnerCountrys = (Spinner) v.findViewById(R.id.spinnerCountry);
+        ArrayList<String> countrysList = SMikhlevskiyUtils.getCountrysList();
+
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(masterActivity, android.R.layout.simple_spinner_item, countrysList);
+
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerCountrys.setAdapter(arrayAdapter);
+
+
+        for (int i = 0; i < countrysList.size(); i++)
+            if (((String) countrysList.get(i)).equals("Ukraine"))
+                spinnerCountrys.setSelection(i);
+
+
         imageViewFoto = (ImageView) v.findViewById(R.id.imageViewFoto);
 
         editTextName = (EditText) v.findViewById(R.id.editTextName);
@@ -108,8 +115,8 @@ public class FragmentAddItem extends Fragment {
         changeDate = (Button) v.findViewById(R.id.buttonChangeDate);
         changeTime = (Button) v.findViewById(R.id.buttonChangeTime);
 
-        editTextDate.setText(nowDate());
-        editTextTime.setText(nowTime());
+        editTextDate.setText(SMikhlevskiyUtils.nowDate());
+        editTextTime.setText(SMikhlevskiyUtils.nowTime());
         bitmap = null;
         imageViewFoto.setOnClickListener(new View.OnClickListener() {
                                              public void onClick(View v) {
@@ -131,7 +138,7 @@ public class FragmentAddItem extends Fragment {
                 mTimePicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        editTextTime.setText(hourOfDay+":"+minute+":00");
+                        editTextTime.setText(hourOfDay + ":" + minute + ":00");
                     }
 
 
@@ -155,13 +162,34 @@ public class FragmentAddItem extends Fragment {
 
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                editTextDate.setText(dayOfMonth+"/"+monthOfYear+"/"+year);
+                                editTextDate.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
                             }
                         }, mYear, mMonth, mDay);
                 dialog.show();
             }
         });
 
+
+
+        if (regPlaceItem != null) {
+
+            editTextName.setText(regPlaceItem.getName());
+
+            editTextAddress.setText(regPlaceItem.getAddress());
+            editTextComment.setText(regPlaceItem.getComment());
+            setBitmap(regPlaceItem.getBitmap());
+
+
+            editTextDate.setText(regPlaceItem.getDate());
+            editTextTime.setText(regPlaceItem.getTime());
+
+            for (int i = 0; i < countrysList.size(); i++)
+                if (((String) countrysList.get(i)).equals(regPlaceItem.getCountry()))
+                    spinnerCountrys.setSelection(i);
+
+            //spinnerCountrys.setSe regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
+
+        }
 
         return v;
     }
@@ -171,6 +199,13 @@ public class FragmentAddItem extends Fragment {
         inflater.inflate(R.menu.menu_fragadditem, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+
+    public void setRegPlaceItem(RegPlaceItem regPlaceItem) {
+        this.regPlaceItem=regPlaceItem;
+
+    }
+
 
     public RegPlaceItem getResult() {
         RegPlaceItem regPlaceItem = new RegPlaceItem();
@@ -183,6 +218,12 @@ public class FragmentAddItem extends Fragment {
 
         regPlaceItem.setDate(editTextDate.getText().toString());
         regPlaceItem.setTime(editTextTime.getText().toString());
+        regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
+
+        if (this.regPlaceItem==null)//add
+            regPlaceItem.setId(-1); else
+            regPlaceItem.setId(this.regPlaceItem.getId());//update
+
 
 
         return regPlaceItem;

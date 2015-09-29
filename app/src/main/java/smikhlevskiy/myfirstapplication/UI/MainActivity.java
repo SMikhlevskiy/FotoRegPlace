@@ -12,20 +12,24 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.model.InterfaceMainActivity;
 import smikhlevskiy.myfirstapplication.model.RegPlaceDB;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InterfaceMainActivity {
 
 
     Fragment fragmentAddItem;
     Fragment fragList;
     RegPlaceDB regPlaceDB;
 
-    public void showFragmentAddItem() {
+    public void showFragmentAddItem(RegPlaceItem regPlaceItem) {
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+
         ft.replace(R.id.MainFrame, fragmentAddItem);
         ft.commit();
+        ((FragmentAddItem) fragmentAddItem).setRegPlaceItem(regPlaceItem);
     }
 
     public void showFragmentList() {
@@ -49,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         ft.add(R.id.MainFrame, fragList);
         ft.commit();
         Log.i("MainActivity", "Create DB");
-        regPlaceDB=new RegPlaceDB(this,"frpdb",null,1);
-        ((FragmentList)fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+        regPlaceDB = new RegPlaceDB(this, "dbpfp2", null, 1);
+        ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
         Log.i("MainActivity", "onCreate:End");
     }
 
@@ -65,17 +69,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.ok: {
-                RegPlaceItem rpi=((FragmentAddItem) fragmentAddItem).getResult();
+                RegPlaceItem rpi = ((FragmentAddItem) fragmentAddItem).getResult();
                 regPlaceDB.SaveItem(rpi);
-                ((FragmentList) fragList).addMessage(rpi);
 
+                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
 
                 showFragmentList();
 
                 break;
             }
             case R.id.plus: {
-                showFragmentAddItem();
+
+                showFragmentAddItem(null);
 
                 break;
             }
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent intent) {
-        Toast.makeText(MainActivity.this,"1",Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, "1", Toast.LENGTH_LONG).show();
         if (resultCode == RESULT_OK) {
             if (intent == null) {
 
