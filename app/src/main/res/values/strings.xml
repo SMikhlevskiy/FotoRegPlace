@@ -8,4 +8,5 @@
     <string name="Address">Address</string>
     <string name="AddItemMenuText">+</string>
     <string name="AddItemMenuOkText">OK</string>
+    <string name="deleteButton">Delete</string>
 </resources>

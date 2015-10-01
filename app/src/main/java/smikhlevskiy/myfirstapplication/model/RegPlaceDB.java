@@ -19,6 +19,14 @@ import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
  */
 public class RegPlaceDB extends SQLiteOpenHelper {
 
+    public void deleteItem(RegPlaceItem regPlaceItem) {
+        SQLiteDatabase db = getWritableDatabase();
+        if (regPlaceItem.getId() >= 0) {
+            Log.i("MainActivity", "Delete Record id="+ regPlaceItem.getId());
+            db.delete(RegPlaceItem.TABLE_NAME, "id=" + regPlaceItem.getId(), null);
+
+        }
+    }
 
     public RegPlaceDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -81,11 +89,12 @@ public class RegPlaceDB extends SQLiteOpenHelper {
             cv.put(RegPlaceItem.KEY_BITMAP, SMikhlevskiyUtils.bitmapToByteArray(regPlaceItem.getBitmap()));
 
         if (regPlaceItem.getId() >= 0) {
+            Log.i("MainActivity", "Update Record Id=" + regPlaceItem.getId());
             db.update(RegPlaceItem.TABLE_NAME, cv, "id=" + regPlaceItem.getId(), null);
-            Log.i("MainActivity","Update Record Id="+regPlaceItem.getId());
+
         } else {
-            db.insert(RegPlaceItem.TABLE_NAME, null, cv);
             Log.i("MainActivity", "Add Record");
+            db.insert(RegPlaceItem.TABLE_NAME, null, cv);
         }
         db.close();
     }

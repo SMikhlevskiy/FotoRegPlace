@@ -1,13 +1,19 @@
 package smikhlevskiy.myfirstapplication.UI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,9 +53,15 @@ public class FragmentAddItem extends Fragment {
     private Button changeTime;
     private Spinner spinnerCountrys;
 
+    private Button changeCountryButton;
+    private Button testParcelableButton;
+
+    private View fragmentView;
+
 
     private Bitmap bitmap;
-    private RegPlaceItem regPlaceItem=null;
+    private RegPlaceItem regPlaceItem = null;
+
     public void setBitmap(Bitmap bitmap) {
 
         this.bitmap = bitmap;
@@ -72,6 +84,17 @@ public class FragmentAddItem extends Fragment {
 
 
     }
+    public void setTextSpinnerCountry(int id) {
+
+                spinnerCountrys.setSelection(id);
+    }
+    public void setTextSpinnerCountry(String text) {
+        ArrayList<String> countrysList = SMikhlevskiyUtils.getCountrysList();
+
+        for (int i = 0; i < countrysList.size(); i++)
+            if (((String) countrysList.get(i)).equals(text))
+                spinnerCountrys.setSelection(i);
+    }
 
     @Override
     public void onDetach() {
@@ -80,12 +103,41 @@ public class FragmentAddItem extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        Log.i("frag","onStart");
+        if (regPlaceItem != null) {
+
+            editTextName.setText(regPlaceItem.getName());
+            Log.i("MainActivity","Edit item:"+regPlaceItem.getName());
+
+            editTextAddress.setText(regPlaceItem.getAddress());
+            editTextComment.setText(regPlaceItem.getComment());
+            setBitmap(regPlaceItem.getBitmap());
+
+
+            editTextDate.setText(regPlaceItem.getDate());
+            editTextTime.setText(regPlaceItem.getTime());
+
+            setTextSpinnerCountry(regPlaceItem.getCountry());
+
+            //spinnerCountrys.setSe regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
+
+        } else
+            setTextSpinnerCountry("Ukraine");
+
+        super.onStart();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_add_item, null);
+
+       Log.i("frag","onCreateView");
+
+        fragmentView = inflater.inflate(R.layout.fragment_add_item, null);
 
 
-        spinnerCountrys = (Spinner) v.findViewById(R.id.spinnerCountry);
+        spinnerCountrys = (Spinner) fragmentView.findViewById(R.id.spinnerCountry);
         ArrayList<String> countrysList = SMikhlevskiyUtils.getCountrysList();
 
         ArrayAdapter<String> arrayAdapter =
@@ -97,23 +149,25 @@ public class FragmentAddItem extends Fragment {
         spinnerCountrys.setAdapter(arrayAdapter);
 
 
-        for (int i = 0; i < countrysList.size(); i++)
-            if (((String) countrysList.get(i)).equals("Ukraine"))
-                spinnerCountrys.setSelection(i);
 
 
-        imageViewFoto = (ImageView) v.findViewById(R.id.imageViewFoto);
-
-        editTextName = (EditText) v.findViewById(R.id.editTextName);
-        editTextAddress = (EditText) v.findViewById(R.id.editTextAddress);
 
 
-        editTextTime = (EditText) v.findViewById(R.id.editTextTime);
-        editTextDate = (EditText) v.findViewById(R.id.editTextDate);
-        editTextComment = (EditText) v.findViewById(R.id.editTextComment);
+        imageViewFoto = (ImageView) fragmentView.findViewById(R.id.imageViewFoto);
 
-        changeDate = (Button) v.findViewById(R.id.buttonChangeDate);
-        changeTime = (Button) v.findViewById(R.id.buttonChangeTime);
+        editTextName = (EditText) fragmentView.findViewById(R.id.editTextName);
+        editTextAddress = (EditText) fragmentView.findViewById(R.id.editTextAddress);
+
+
+        editTextTime = (EditText) fragmentView.findViewById(R.id.editTextTime);
+        editTextDate = (EditText) fragmentView.findViewById(R.id.editTextDate);
+        editTextComment = (EditText) fragmentView.findViewById(R.id.editTextComment);
+
+        changeDate = (Button) fragmentView.findViewById(R.id.buttonChangeDate);
+        changeTime = (Button) fragmentView.findViewById(R.id.buttonChangeTime);
+
+        changeCountryButton = (Button) fragmentView.findViewById(R.id.changeCountryButton);
+        testParcelableButton = (Button) fragmentView.findViewById(R.id.testParcelableButton);
 
         editTextDate.setText(SMikhlevskiyUtils.nowDate());
         editTextTime.setText(SMikhlevskiyUtils.nowTime());
@@ -169,29 +223,22 @@ public class FragmentAddItem extends Fragment {
             }
         });
 
+        testParcelableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        changeCountryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                masterActivity.showDialog(0);
+            }
+        });
 
 
-        if (regPlaceItem != null) {
 
-            editTextName.setText(regPlaceItem.getName());
-
-            editTextAddress.setText(regPlaceItem.getAddress());
-            editTextComment.setText(regPlaceItem.getComment());
-            setBitmap(regPlaceItem.getBitmap());
-
-
-            editTextDate.setText(regPlaceItem.getDate());
-            editTextTime.setText(regPlaceItem.getTime());
-
-            for (int i = 0; i < countrysList.size(); i++)
-                if (((String) countrysList.get(i)).equals(regPlaceItem.getCountry()))
-                    spinnerCountrys.setSelection(i);
-
-            //spinnerCountrys.setSe regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
-
-        }
-
-        return v;
+        return fragmentView;
     }
 
 
@@ -202,7 +249,12 @@ public class FragmentAddItem extends Fragment {
 
 
     public void setRegPlaceItem(RegPlaceItem regPlaceItem) {
-        this.regPlaceItem=regPlaceItem;
+        this.regPlaceItem = regPlaceItem;
+
+    }
+
+    public RegPlaceItem getRegPlaceItem() {
+        return this.regPlaceItem;
 
     }
 
@@ -220,10 +272,10 @@ public class FragmentAddItem extends Fragment {
         regPlaceItem.setTime(editTextTime.getText().toString());
         regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
 
-        if (this.regPlaceItem==null)//add
-            regPlaceItem.setId(-1); else
+        if (this.regPlaceItem == null)//add
+            regPlaceItem.setId(-1);
+        else
             regPlaceItem.setId(this.regPlaceItem.getId());//update
-
 
 
         return regPlaceItem;
@@ -251,11 +303,30 @@ public class FragmentAddItem extends Fragment {
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            editTextComment.setText("cancel");
+
 
         }
 
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("RegPlaceItem", regPlaceItem);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState!=null) {
+
+            regPlaceItem = (RegPlaceItem) savedInstanceState.getParcelable("RegPlaceItem");
+        }
+
+    }
+
+
 
 }

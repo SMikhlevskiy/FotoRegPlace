@@ -1,7 +1,10 @@
 package smikhlevskiy.myfirstapplication.UI;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
 import smikhlevskiy.myfirstapplication.model.InterfaceMainActivity;
 import smikhlevskiy.myfirstapplication.model.RegPlaceDB;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
@@ -84,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
 
                 break;
             }
+            case R.id.delete: {
+
+                regPlaceDB.deleteItem(((FragmentAddItem) fragmentAddItem).getRegPlaceItem());
+                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+                showFragmentList();
+                break;
+            }
+
 
         }
         return true;
@@ -114,5 +128,23 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         }
 
 
+    }
+
+    protected Dialog onCreateDialog(int id) {
+        Log.i("MainActivity", "show Dialog");
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        //String a[]={"aaa","bb"};
+
+        ArrayList<String> countryList= SMikhlevskiyUtils.getCountrysList();
+        String countryArray[]=countryList.toArray(new String[countryList.size()]);
+
+        adb.setItems(countryArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((FragmentAddItem) fragmentAddItem).setTextSpinnerCountry(which);
+            }
+        });
+
+        return adb.create();
     }
 }

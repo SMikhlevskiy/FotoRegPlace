@@ -2,19 +2,28 @@
 
 <resources>
 
-<color name="white">#FFFFFF</color>
-<color name="black">#000000</color>
-<color name="light_yellow">#f0ead7</color>
-<color name="dark_blue">#48c7e0</color>
-<color name="dark_orange">#d54f2f</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="light_yellow">#f0ead7</color>
+    <color name="dark_blue">#48c7e0</color>
+    <color name="dark_orange">#d54f2f</color>
 
 
-<color name="textColor">#FFF</color>
-<color name="textFieldColor">#000</color>
-<color name="textShadow">#FFF</color>
-<color name="listViewBg">#DADFEE</color>
+    <color name="textColor">#FFF</color>
+    <color name="textFieldColor">#000</color>
+    <color name="textShadow">#FFF</color>
+    <color name="listViewBg">#DADFEE</color>
 
-<color name="barDarkColor">#CECECE</color>
-<color name="barMeduimColor">#DFDEE0</color>
-<color name="barLightColor">#F2F2F2</color>
+    <color name="barDarkColor">#CECECE</color>
+    <color name="barMeduimColor">#DFDEE0</color>
+    <color name="barLightColor">#F2F2F2</color>
+
+    <color name="primary">#F50057</color>
+    <color name="primary_dark">#C51162</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="accent">#FF80AB</color>
+
+
 </resources>

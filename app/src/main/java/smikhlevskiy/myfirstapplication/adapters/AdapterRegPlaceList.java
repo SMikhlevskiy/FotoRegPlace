@@ -57,7 +57,7 @@ public class AdapterRegPlaceList extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = lInflater.inflate(R.layout.menu_regplace_item, parent, false);
+            convertView = lInflater.inflate(R.layout.item_regplacelist, parent, false);
             RegPlaceItem itemData=regPlaceList.get(position);
             ((TextView) convertView.findViewById(R.id.adress)).setText(itemData.getAddress());
             ((TextView) convertView.findViewById(R.id.regPlaceItemName)).setText(itemData.getName());
