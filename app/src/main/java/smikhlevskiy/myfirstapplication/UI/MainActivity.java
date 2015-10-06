@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
 
     Fragment fragmentAddItem;
     Fragment fragList;
+    Fragment fragmentSettings;
     RegPlaceDB regPlaceDB;
 
     public void showFragmentAddItem(RegPlaceItem regPlaceItem) {
@@ -36,6 +38,15 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         ft.replace(R.id.MainFrame, fragmentAddItem);
         ft.commit();
         ((FragmentAddItem) fragmentAddItem).setRegPlaceItem(regPlaceItem);
+    }
+
+    public void showSettings() {
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        ft.replace(R.id.MainFrame, fragmentSettings);
+        ft.commit();
+
     }
 
     public void showFragmentList() {
@@ -50,17 +61,23 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         Log.i("MainActivity", "onCreate:Begin");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        regPlaceDB = new RegPlaceDB(this, "dbpafp2", null, 3);
+        SharedPreferences setting=getSharedPreferences(getString(R.string.regFotoSharedPreferencesName),0);
+        //if (savedInstanceState == null) {
+
+            fragmentAddItem = new FragmentAddItem();
+           fragmentSettings = new FragmentSettings();
+            fragList = new FragmentList();
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(R.id.MainFrame, fragList);
+            ft.commit();
+
+            Log.i("MainActivity", "Create DB");
+            ((FragmentList) fragList).adapterRegPlaceList.setSharedPrefernces(setting);
+            ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
 
 
-        fragmentAddItem = new FragmentAddItem();
-        fragList = new FragmentList();
-
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.MainFrame, fragList);
-        ft.commit();
-        Log.i("MainActivity", "Create DB");
-        regPlaceDB = new RegPlaceDB(this, "dbpfp2", null, 1);
-        ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
         Log.i("MainActivity", "onCreate:End");
     }
 
@@ -84,6 +101,16 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
 
                 break;
             }
+            case R.id.ok_fragsettings: {
+
+
+                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+
+                showFragmentList();
+
+                break;
+            }
+
             case R.id.plus: {
 
                 showFragmentAddItem(null);
@@ -97,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
                 showFragmentList();
                 break;
             }
+            case R.id.settings:{
+                showSettings();
+                break;
+            }
+
 
 
         }
@@ -131,12 +163,12 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
     }
 
     protected Dialog onCreateDialog(int id) {
-        Log.i("MainActivity", "show Dialog");
+        Log.i(getString(R.string.nameMainActivityLog), "show Dialog");
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         //String a[]={"aaa","bb"};
 
-        ArrayList<String> countryList= SMikhlevskiyUtils.getCountrysList();
-        String countryArray[]=countryList.toArray(new String[countryList.size()]);
+        ArrayList<String> countryList = SMikhlevskiyUtils.getCountrysList();
+        String countryArray[] = countryList.toArray(new String[countryList.size()]);
 
         adb.setItems(countryArray, new DialogInterface.OnClickListener() {
             @Override

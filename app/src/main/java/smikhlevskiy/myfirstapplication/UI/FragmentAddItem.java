@@ -1,18 +1,14 @@
 package smikhlevskiy.myfirstapplication.UI;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,9 +22,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.io.File;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import smikhlevskiy.myfirstapplication.R;
 import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
@@ -54,9 +55,11 @@ public class FragmentAddItem extends Fragment {
     private Spinner spinnerCountrys;
 
     private Button changeCountryButton;
-    private Button testParcelableButton;
+    private Button fullSizedFotoButton;
 
     private View fragmentView;
+
+    private Uri mImageUri = null;
 
 
     private Bitmap bitmap;
@@ -84,10 +87,12 @@ public class FragmentAddItem extends Fragment {
 
 
     }
+
     public void setTextSpinnerCountry(int id) {
 
-                spinnerCountrys.setSelection(id);
+        spinnerCountrys.setSelection(id);
     }
+
     public void setTextSpinnerCountry(String text) {
         ArrayList<String> countrysList = SMikhlevskiyUtils.getCountrysList();
 
@@ -104,15 +109,22 @@ public class FragmentAddItem extends Fragment {
 
     @Override
     public void onStart() {
-        Log.i("frag","onStart");
+        Log.i("fragAddItem", "onStart");
         if (regPlaceItem != null) {
 
             editTextName.setText(regPlaceItem.getName());
-            Log.i("MainActivity","Edit item:"+regPlaceItem.getName());
+            Log.i("MainActivity", "Edit item:" + regPlaceItem.getName());
 
             editTextAddress.setText(regPlaceItem.getAddress());
             editTextComment.setText(regPlaceItem.getComment());
+
+
             setBitmap(regPlaceItem.getBitmap());
+            if (regPlaceItem.getUri().length() > 0) {
+                mImageUri = Uri.parse(regPlaceItem.getUri());
+                SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);
+                Log.i("MainActivity", "URI");
+            }
 
 
             editTextDate.setText(regPlaceItem.getDate());
@@ -122,8 +134,10 @@ public class FragmentAddItem extends Fragment {
 
             //spinnerCountrys.setSe regPlaceItem.setCountry(spinnerCountrys.getSelectedItem().toString());
 
-        } else
+        } else {
             setTextSpinnerCountry("Ukraine");
+
+        }
 
         super.onStart();
     }
@@ -132,7 +146,7 @@ public class FragmentAddItem extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       Log.i("frag","onCreateView");
+        Log.i("frag", "onCreateView");
 
         fragmentView = inflater.inflate(R.layout.fragment_add_item, null);
 
@@ -149,10 +163,6 @@ public class FragmentAddItem extends Fragment {
         spinnerCountrys.setAdapter(arrayAdapter);
 
 
-
-
-
-
         imageViewFoto = (ImageView) fragmentView.findViewById(R.id.imageViewFoto);
 
         editTextName = (EditText) fragmentView.findViewById(R.id.editTextName);
@@ -167,21 +177,47 @@ public class FragmentAddItem extends Fragment {
         changeTime = (Button) fragmentView.findViewById(R.id.buttonChangeTime);
 
         changeCountryButton = (Button) fragmentView.findViewById(R.id.changeCountryButton);
-        testParcelableButton = (Button) fragmentView.findViewById(R.id.testParcelableButton);
+        fullSizedFotoButton = (Button) fragmentView.findViewById(R.id.fullSizedFotoButton);
 
         editTextDate.setText(SMikhlevskiyUtils.nowDate());
         editTextTime.setText(SMikhlevskiyUtils.nowTime());
         bitmap = null;
+        mImageUri = null;
+        //-----------------------------------
         imageViewFoto.setOnClickListener(new View.OnClickListener() {
                                              public void onClick(View v) {
                                                  Intent intent = new Intent();
                                                  intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                                                 startActivityForResult(intent, 1);
+                                                 startActivityForResult(intent, SMikhlevskiyUtils.smallFotoIntent);
 
                                              }
                                          }
         );
+        //------------------------------------
+        fullSizedFotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                File photo;
+                try {
+                    // place where to store camera taken picture
+                    photo = SMikhlevskiyUtils.createTemporaryFile("img_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()), ".jpg");
+                    photo.delete();
+                } catch (Exception e) {
+                    Toast.makeText(masterActivity, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG);
+                    return;
+
+                }
+                mImageUri = Uri.fromFile(photo);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                //start camera intent
+                startActivityForResult(intent, SMikhlevskiyUtils.fullSizedFotoIntent);
+            }
+        });
+        //---------------------------------------
         changeTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +237,7 @@ public class FragmentAddItem extends Fragment {
                 mTimePicker.show();
             }
         });
-
+        //--------------------------------
         changeDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,20 +258,13 @@ public class FragmentAddItem extends Fragment {
                 dialog.show();
             }
         });
-
-        testParcelableButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        //------------------------
         changeCountryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 masterActivity.showDialog(0);
             }
         });
-
 
 
         return fragmentView;
@@ -258,15 +287,21 @@ public class FragmentAddItem extends Fragment {
 
     }
 
-
+    //-----------------------------------------------------------------------------------------
     public RegPlaceItem getResult() {
         RegPlaceItem regPlaceItem = new RegPlaceItem();
 
         regPlaceItem.setName(editTextName.getText().toString());
         regPlaceItem.setAddress(editTextAddress.getText().toString());
         regPlaceItem.setComment(editTextComment.getText().toString());
-        if (bitmap != null)
+        if (bitmap != null) {
             regPlaceItem.setBitmap(bitmap);
+            Log.i(getString(R.string.nameMainActivityLog), "saveBitmap");
+        } else if (mImageUri != null) {
+            regPlaceItem.setUri(mImageUri.toString());
+            Log.i(getString(R.string.nameMainActivityLog), "saveUri");
+        } else
+            regPlaceItem.setUri("");
 
         regPlaceItem.setDate(editTextDate.getText().toString());
         regPlaceItem.setTime(editTextTime.getText().toString());
@@ -285,28 +320,37 @@ public class FragmentAddItem extends Fragment {
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent intent) {
 
-        //Toast.makeText(MainActivity.this, "1", Toast.LENGTH_LONG).show();
-        if (resultCode == Activity.RESULT_OK) {
+        Log.i(getString(R.string.nameMainActivityLog), "getResult:" + requestCode);
+        if (requestCode == SMikhlevskiyUtils.smallFotoIntent) {
+            if (resultCode == Activity.RESULT_OK) {
 
-            if (intent == null) {
+                if (intent == null) {
 
-            } else {
+                } else {
 
-                Bundle bndl = intent.getExtras();
-                if (bndl != null) {
-                    Object obj = intent.getExtras().get("data");
-                    if (obj instanceof Bitmap) {
-                        Bitmap bitmap = (Bitmap) obj;
-
-                        setBitmap(bitmap);
+                    Bundle bndl = intent.getExtras();
+                    if (bndl != null) {
+                        Object obj = intent.getExtras().get("data");
+                        if (obj instanceof Bitmap) {
+                            Bitmap bitmap = (Bitmap) obj;
+                            mImageUri = null;
+                            setBitmap(bitmap);
+                            Log.i(getString(R.string.nameMainActivityLog), "SmallFoto");
+                        }
                     }
                 }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+
+
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (requestCode == SMikhlevskiyUtils.fullSizedFotoIntent && resultCode == Activity.RESULT_OK) {
+            ImageView imageView;
+            //... some code to inflate/create/find appropriate ImageView to place grabbed image
+            SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);
 
 
+            Log.i(getString(R.string.nameMainActivityLog), "fullSizedFoto");
         }
-
 
     }
 
@@ -320,13 +364,12 @@ public class FragmentAddItem extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
-        if (savedInstanceState!=null) {
+        if (savedInstanceState != null) {
 
             regPlaceItem = (RegPlaceItem) savedInstanceState.getParcelable("RegPlaceItem");
         }
 
     }
-
 
 
 }

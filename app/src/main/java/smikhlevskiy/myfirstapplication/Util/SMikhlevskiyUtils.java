@@ -1,9 +1,16 @@
 package smikhlevskiy.myfirstapplication.Util;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +23,8 @@ import java.util.Locale;
 public abstract class SMikhlevskiyUtils {
     public static final String DATE_FORMAT_NOW = "dd-MM-yyyy";
     public static final String TIME_FORMAT_NOW = "HH:mm:ss";
+    public static final int fullSizedFotoIntent = 1;
+    public static final int smallFotoIntent = 2;
 
     public static String nowDate() {
         Calendar cal = Calendar.getInstance();
@@ -53,4 +62,24 @@ public abstract class SMikhlevskiyUtils {
         return countries;
     }
 
+    public static File createTemporaryFile(String part, String ext) throws Exception {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+        if (!tempDir.exists()) {
+            tempDir.mkdir();
+        }
+        return File.createTempFile(part, ext, tempDir);
+    }
+
+    public static void grabImage(Context context, ImageView imageView, Uri mImageUri) {
+        context.getContentResolver().notifyChange(mImageUri, null);
+        ContentResolver cr = context.getContentResolver();
+        Bitmap bitmap;
+        try {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
+            imageView.setImageBitmap(bitmap);
+        } catch (Exception e) {
+
+        }
+    }
 }

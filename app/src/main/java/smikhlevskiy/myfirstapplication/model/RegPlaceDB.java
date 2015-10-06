@@ -42,6 +42,7 @@ public class RegPlaceDB extends SQLiteOpenHelper {
                         RegPlaceItem.KEY_DATE + " TEXT, " +
                         RegPlaceItem.KEY_COMMENT + " TEXT, " +
                         RegPlaceItem.KEY_COUNTRY + " TEXT, " +
+                        RegPlaceItem.KEY_URI + " TEXT, " +
                         RegPlaceItem.KEY_BITMAP + " BLOB)"
 
 
@@ -62,8 +63,11 @@ public class RegPlaceDB extends SQLiteOpenHelper {
                 rpi.setDate(cursor.getString(4));
                 rpi.setComment(cursor.getString(5));
                 rpi.setCountry(cursor.getString(6));
-                if (cursor.getBlob(7) != null)
-                    rpi.setBitmap(SMikhlevskiyUtils.byteArraytoBitmap(cursor.getBlob(7)));
+                rpi.setUri(cursor.getString(7));
+                if (cursor.getBlob(8) != null) {
+                    rpi.setBitmap(SMikhlevskiyUtils.byteArraytoBitmap(cursor.getBlob(8)));
+
+                }
                 rpiList.add(rpi);
 
 
@@ -84,6 +88,7 @@ public class RegPlaceDB extends SQLiteOpenHelper {
         cv.put(RegPlaceItem.KEY_COMMENT, regPlaceItem.getComment());
 
         cv.put(RegPlaceItem.KEY_COUNTRY, regPlaceItem.getCountry());
+        cv.put(RegPlaceItem.KEY_URI, regPlaceItem.getUri());
 
         if (regPlaceItem.getBitmap() != null)
             cv.put(RegPlaceItem.KEY_BITMAP, SMikhlevskiyUtils.bitmapToByteArray(regPlaceItem.getBitmap()));

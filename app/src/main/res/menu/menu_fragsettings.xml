@@ -7,8 +7,8 @@
         android:icon="@mipmap/settings2"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/plus"
-        android:title="@string/AddItemMenuText"
+    <item android:id="@+id/ok_fragsettings"
+        android:title="@string/AddItemMenuOkText"
         app:showAsAction="ifRoom" />
 
 </menu>

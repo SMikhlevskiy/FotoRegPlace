@@ -19,6 +19,7 @@ public class RegPlaceItem implements Parcelable {
     public static final String KEY_COMMENT = "comment";
     public static final String KEY_BITMAP = "bitmap";
     public static final String KEY_COUNTRY = "country";
+    public static final String KEY_URI = "uri";
 
 
     private int id;
@@ -28,8 +29,9 @@ public class RegPlaceItem implements Parcelable {
     private String time;
     private String country;
     private String comment;
-    private Bitmap bitmap = null;
 
+    private String uri="";
+    private Bitmap bitmap = null;
 
     public static final Creator<RegPlaceItem> CREATOR = new Creator<RegPlaceItem>() {
         @Override
@@ -60,6 +62,8 @@ public class RegPlaceItem implements Parcelable {
         dest.writeString(country);
         dest.writeString(comment);
         dest.writeParcelable(bitmap, flags);
+        dest.writeString(uri);
+
     }
 
     public RegPlaceItem() {
@@ -75,6 +79,7 @@ public class RegPlaceItem implements Parcelable {
         country = in.readString();
         comment = in.readString();
         bitmap = in.readParcelable(Bitmap.class.getClassLoader());
+        uri =  in.readString();
     }
 
     public String getName() {
@@ -139,5 +144,14 @@ public class RegPlaceItem implements Parcelable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }

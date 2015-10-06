@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/regFotoSharedPreferencesName">
+    <CheckBoxPreference
+        android:key="pref_show_address"
+        android:summary="Show Address in List"
+        android:title="Show Address"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="pref_show_datetime"
+        android:summary="Show Date and Time in List"
+        android:title="Show Date and Time"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_show_country"
+        android:summary="Show Country in List"
+        android:title="Show Country"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_show_comment"
+        android:summary="Show Comment in List"
+        android:title="Show Comment"
+        android:defaultValue="false"/>
+
+
+</PreferenceScreen>

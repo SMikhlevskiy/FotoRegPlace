@@ -1,6 +1,9 @@
 package smikhlevskiy.myfirstapplication.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
+import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 /**
@@ -18,13 +22,10 @@ import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
  */
 public class AdapterRegPlaceList extends BaseAdapter {
 
-    public void setRegPlaceList(ArrayList<RegPlaceItem> regPlaceList) {
-        this.regPlaceList = regPlaceList;
-    }
 
-    private ArrayList <RegPlaceItem>regPlaceList = new ArrayList();
+    private ArrayList<RegPlaceItem> regPlaceList = new ArrayList();
 
-
+    private SharedPreferences sharedPreferences;
     private Context context;
 
 
@@ -55,20 +56,81 @@ public class AdapterRegPlaceList extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             LayoutInflater lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = lInflater.inflate(R.layout.item_regplacelist, parent, false);
-            RegPlaceItem itemData=regPlaceList.get(position);
-            ((TextView) convertView.findViewById(R.id.adress)).setText(itemData.getAddress());
-            ((TextView) convertView.findViewById(R.id.regPlaceItemName)).setText(itemData.getName());
-            ((TextView) convertView.findViewById(R.id.date)).setText(itemData.getDate()+" "+itemData.getTime());
-            if (itemData.getBitmap()!=null)
-            ((ImageView) convertView.findViewById(R.id.imageFoto)).setImageBitmap(itemData.getBitmap());
+            RegPlaceItem itemData = regPlaceList.get(position);
+            TextView textViewAddress = (TextView) convertView.findViewById(R.id.adress);
+            if (!sharedPreferences.getBoolean("pref_show_address", true))
+                textViewAddress.setVisibility(View.GONE);
+            else
+                textViewAddress.setVisibility(View.VISIBLE);
+            textViewAddress.setText(itemData.getAddress());
+
+            TextView textViewName = (TextView) convertView.findViewById(R.id.regPlaceItemName);
+            textViewName.setText(itemData.getName());
+
+            TextView textViewTime = (TextView) convertView.findViewById(R.id.date);
+            textViewTime.setText(itemData.getDate() + " " + itemData.getTime());
+
+            if (!sharedPreferences.getBoolean("pref_show_datetime", true)) {
+
+                textViewTime.setVisibility(View.GONE);
+            } else {
+
+                textViewTime.setVisibility(View.VISIBLE);
+            }
+
+
+            if (itemData.getBitmap() != null) {
+                ((ImageView) convertView.findViewById(R.id.imageFoto)).setImageBitmap(itemData.getBitmap());
+                Log.i("MainActivity", "Bitamp!!!!!");
+            } else if (itemData.getUri().trim().length() > 0) {
+                Log.i("MainActivity", itemData.getUri());
+                SMikhlevskiyUtils.grabImage(convertView.getContext(), (ImageView) convertView.findViewById(R.id.imageFoto), Uri.parse(itemData.getUri()));
+            }
 
 
         }
 
+/*
+<CheckBoxPreference
+        android:key="pref_show_address"
+        android:summary="Show Address in List"
+        android:title="Show Address"
+        android:defaultValue="true"/>
+    <CheckBoxPreference
+        android:key="pref_show_datetime"
+        android:summary="Show Date and Time in List"
+        android:title="Show Date and Time"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_show_country"
+        android:summary="Show Country in List"
+        android:title="Show Country"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_show_comment"
+        android:summary="Show Comment in List"
+        android:title="Show Comment"
+        android:defaultValue="false"/>
 
+ */
         return convertView;
     }
+
+    public void setRegPlaceList(ArrayList<RegPlaceItem> regPlaceList) {
+
+
+        this.regPlaceList = regPlaceList;
+
+
+
+    }
+
+    public void setSharedPrefernces(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
 }

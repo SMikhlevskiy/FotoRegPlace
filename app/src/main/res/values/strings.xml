@@ -9,4 +9,6 @@
     <string name="AddItemMenuText">+</string>
     <string name="AddItemMenuOkText">OK</string>
     <string name="deleteButton">Delete</string>
+    <string name="nameMainActivityLog">MainActivity</string>
+    <string name="regFotoSharedPreferencesName">rfp_sp</string>
 </resources>
