@@ -2,13 +2,14 @@ package smikhlevskiy.myfirstapplication.UI;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.provider.MediaStore;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,8 +122,11 @@ public class FragmentAddItem extends Fragment {
 
             setBitmap(regPlaceItem.getBitmap());
             if (regPlaceItem.getUri().length() > 0) {
+                imageViewFoto.setImageBitmap(SMikhlevskiyUtils.loadBitmap(regPlaceItem.getUri(),masterActivity.getContentResolver()));
+                /*
                 mImageUri = Uri.parse(regPlaceItem.getUri());
                 SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);
+                */
                 Log.i("MainActivity", "URI");
             }
 
@@ -344,9 +348,10 @@ public class FragmentAddItem extends Fragment {
 
             }
         } else if (requestCode == SMikhlevskiyUtils.fullSizedFotoIntent && resultCode == Activity.RESULT_OK) {
-            ImageView imageView;
+
             //... some code to inflate/create/find appropriate ImageView to place grabbed image
-            SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);
+            imageViewFoto.setImageBitmap(SMikhlevskiyUtils.loadBitmap(mImageUri.toString(),masterActivity.getContentResolver()));
+            //SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);
 
 
             Log.i(getString(R.string.nameMainActivityLog), "fullSizedFoto");

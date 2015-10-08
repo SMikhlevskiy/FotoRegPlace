@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,15 +73,33 @@ public abstract class SMikhlevskiyUtils {
         return File.createTempFile(part, ext, tempDir);
     }
 
-    public static void grabImage(Context context, ImageView imageView, Uri mImageUri) {
-        context.getContentResolver().notifyChange(mImageUri, null);
-        ContentResolver cr = context.getContentResolver();
-        Bitmap bitmap;
-        try {
-            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
-            imageView.setImageBitmap(bitmap);
-        } catch (Exception e) {
+    /*
+        public static void grabImage(Context context, ImageView imageView, Uri mImageUri) {
+            context.getContentResolver().notifyChange(mImageUri, null);
+            ContentResolver cr = context.getContentResolver();
+            Bitmap bitmap;
+            try {
+                bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
+                imageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
 
+            }
         }
+        */
+    public static Bitmap loadBitmap(String mImageUri, ContentResolver cr) {
+
+
+        //context.getContentResolver().notifyChange(mImageUri, null);
+        //ContentResolver cr = context.getContentResolver();
+        cr.notifyChange(Uri.parse(mImageUri), null);
+
+        try {
+            return android.provider.MediaStore.Images.Media.getBitmap(cr, Uri.parse(mImageUri));
+            //imageView.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            return null;
+        }
+
+
     }
 }

@@ -11,4 +11,5 @@
     <string name="deleteButton">Delete</string>
     <string name="nameMainActivityLog">MainActivity</string>
     <string name="regFotoSharedPreferencesName">rfp_sp</string>
+    <string name="fotoGalary">Galary</string>
 </resources>

@@ -2,6 +2,8 @@ package smikhlevskiy.myfirstapplication.UI;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
     Fragment fragmentAddItem;
     Fragment fragList;
     Fragment fragmentSettings;
+    Fragment fragmentFotoList;
     RegPlaceDB regPlaceDB;
 
     public void showFragmentAddItem(RegPlaceItem regPlaceItem) {
@@ -38,6 +41,14 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         ft.replace(R.id.MainFrame, fragmentAddItem);
         ft.commit();
         ((FragmentAddItem) fragmentAddItem).setRegPlaceItem(regPlaceItem);
+    }
+    public void showFragmentFotoList() {
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        ft.replace(R.id.MainFrame, fragmentFotoList);
+        ft.commit();
+
     }
 
     public void showSettings() {
@@ -60,22 +71,29 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("MainActivity", "onCreate:Begin");
         super.onCreate(savedInstanceState);
+/*
+        for (Fragment aFrag : getFragmentManager().get .getFragments()) {
+            getFragmentManager().beginTransaction().remove(aFrag).commit();
+        }
+        */
+
         setContentView(R.layout.activity_main);
         regPlaceDB = new RegPlaceDB(this, "dbpafp2", null, 3);
-        SharedPreferences setting=getSharedPreferences(getString(R.string.regFotoSharedPreferencesName),0);
+        SharedPreferences setting = getSharedPreferences(getString(R.string.regFotoSharedPreferencesName), 0);
         //if (savedInstanceState == null) {
 
-            fragmentAddItem = new FragmentAddItem();
-           fragmentSettings = new FragmentSettings();
-            fragList = new FragmentList();
+        fragmentAddItem = new FragmentAddItem();
+        fragmentSettings = new FragmentSettings();
+        fragmentFotoList = new FragmentViewPagerGalary(getSupportFragmentManager());
+        fragList = new FragmentList();
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(R.id.MainFrame, fragList);
-            ft.commit();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.MainFrame, fragList);
+        ft.commit();
 
-            Log.i("MainActivity", "Create DB");
-            ((FragmentList) fragList).adapterRegPlaceList.setSharedPrefernces(setting);
-            ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+        Log.i("MainActivity", "Create DB");
+        ((FragmentList) fragList).adapterRegPlaceList.setSharedPrefernces(setting);
+        ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
 
 
         Log.i("MainActivity", "onCreate:End");
@@ -83,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -124,11 +143,14 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
                 showFragmentList();
                 break;
             }
-            case R.id.settings:{
+            case R.id.settings: {
                 showSettings();
                 break;
             }
-
+            case R.id.show_galary:{
+                showFragmentFotoList();
+                break;
+            }
 
 
         }

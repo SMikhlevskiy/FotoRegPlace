@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
 import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
+import smikhlevskiy.myfirstapplication.controllers.AsyncTaskImageLoader;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 /**
@@ -88,7 +89,10 @@ public class AdapterRegPlaceList extends BaseAdapter {
                 Log.i("MainActivity", "Bitamp!!!!!");
             } else if (itemData.getUri().trim().length() > 0) {
                 Log.i("MainActivity", itemData.getUri());
-                SMikhlevskiyUtils.grabImage(convertView.getContext(), (ImageView) convertView.findViewById(R.id.imageFoto), Uri.parse(itemData.getUri()));
+                //((ImageView) convertView.findViewById(R.id.imageFoto)).setImageBitmap(SMikhlevskiyUtils.loadBitmap(itemData.getUri(), convertView.getContext().getContentResolver()));
+                AsyncTaskImageLoader asyncTaskImageLoader=new AsyncTaskImageLoader((ImageView) convertView.findViewById(R.id.imageFoto),convertView.getContext().getContentResolver());
+                asyncTaskImageLoader.execute(itemData.getUri());
+                //SMikhlevskiyUtils.grabImage(convertView.getContext(), (ImageView) convertView.findViewById(R.id.imageFoto), Uri.parse(itemData.getUri()));
             }
 
 
