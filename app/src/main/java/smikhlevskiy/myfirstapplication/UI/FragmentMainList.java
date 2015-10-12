@@ -13,17 +13,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import smikhlevskiy.myfirstapplication.R;
-import smikhlevskiy.myfirstapplication.adapters.AdapterRegPlaceList;
+import smikhlevskiy.myfirstapplication.adapters.AdapterMainList;
 import smikhlevskiy.myfirstapplication.model.InterfaceMainActivity;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
-public class FragmentList extends Fragment {
+public class FragmentMainList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private Activity masterActivity;
 
 
-    AdapterRegPlaceList adapterRegPlaceList = new AdapterRegPlaceList();
+    AdapterMainList adapterMainList = new AdapterMainList();
 
 
     private ListView messageListView;
@@ -41,13 +41,13 @@ public class FragmentList extends Fragment {
         //Toast.makeText(context, s, Toast.LENGTH_LONG);
 
 
-        adapterRegPlaceList.add(itemData);
-        adapterRegPlaceList.notifyDataSetChanged();
+        adapterMainList.add(itemData);
+        adapterMainList.notifyDataSetChanged();
 
 
         //adapter.notifyDataSetChanged();
 
-        messageListView.setSelection(adapterRegPlaceList.getCount() - 1);
+        messageListView.setSelection(adapterMainList.getCount() - 1);
 
 
     }
@@ -57,20 +57,20 @@ public class FragmentList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_main_list, container, false);
 
 
         messageListView = (ListView) v.findViewById(R.id.fListMessages);
 
-        adapterRegPlaceList.setContext(v.getContext());
-        messageListView.setAdapter(adapterRegPlaceList);
+        adapterMainList.setContext(v.getContext());
+        messageListView.setAdapter(adapterMainList);
 
         messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Log.i("MainActivity", "itemClick: position = " + position + ", id = "
-                        + ((RegPlaceItem)adapterRegPlaceList.getItem(position)).getId());
-                ((InterfaceMainActivity) masterActivity).showFragmentAddItem((RegPlaceItem)adapterRegPlaceList.getItem(position));
+                        + ((RegPlaceItem) adapterMainList.getItem(position)).getId());
+                ((InterfaceMainActivity) masterActivity).showFragmentAddItem((RegPlaceItem) adapterMainList.getItem(position));
             }
         });
 
@@ -93,7 +93,7 @@ public class FragmentList extends Fragment {
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fraglist, menu);
+        inflater.inflate(R.menu.menu_frag_main_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

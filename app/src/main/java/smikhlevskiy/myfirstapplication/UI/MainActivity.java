@@ -24,6 +24,7 @@ import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
 import smikhlevskiy.myfirstapplication.model.InterfaceMainActivity;
 import smikhlevskiy.myfirstapplication.model.RegPlaceDB;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
+import smikhlevskiy.myfirstapplication.services.ServicePlayMusic;
 
 public class MainActivity extends AppCompatActivity implements InterfaceMainActivity {
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         ft.commit();
         ((FragmentAddItem) fragmentAddItem).setRegPlaceItem(regPlaceItem);
     }
+
     public void showFragmentFotoList() {
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -78,22 +80,22 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
         */
 
         setContentView(R.layout.activity_main);
-        regPlaceDB = new RegPlaceDB(this, "dbpafp2", null, 3);
+        regPlaceDB = new RegPlaceDB(this, SMikhlevskiyUtils.regFotoPlaceDBName, null, 3);
         SharedPreferences setting = getSharedPreferences(getString(R.string.regFotoSharedPreferencesName), 0);
         //if (savedInstanceState == null) {
 
         fragmentAddItem = new FragmentAddItem();
         fragmentSettings = new FragmentSettings();
-        fragmentFotoList = new FragmentViewPagerGalary(getSupportFragmentManager());
-        fragList = new FragmentList();
+        fragmentFotoList = new FragmentGalary(getSupportFragmentManager(),regPlaceDB.getSavedItems());
+        fragList = new FragmentMainList();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.MainFrame, fragList);
         ft.commit();
 
         Log.i("MainActivity", "Create DB");
-        ((FragmentList) fragList).adapterRegPlaceList.setSharedPrefernces(setting);
-        ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+        ((FragmentMainList) fragList).adapterMainList.setSharedPrefernces(setting);
+        ((FragmentMainList) fragList).adapterMainList.setRegPlaceList(regPlaceDB.getSavedItems());
 
 
         Log.i("MainActivity", "onCreate:End");
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
                 RegPlaceItem rpi = ((FragmentAddItem) fragmentAddItem).getResult();
                 regPlaceDB.SaveItem(rpi);
 
-                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+                ((FragmentMainList) fragList).adapterMainList.setRegPlaceList(regPlaceDB.getSavedItems());
 
                 showFragmentList();
 
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
             case R.id.ok_fragsettings: {
 
 
-                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+                ((FragmentMainList) fragList).adapterMainList.setRegPlaceList(regPlaceDB.getSavedItems());
 
                 showFragmentList();
 
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
             case R.id.delete: {
 
                 regPlaceDB.deleteItem(((FragmentAddItem) fragmentAddItem).getRegPlaceItem());
-                ((FragmentList) fragList).adapterRegPlaceList.setRegPlaceList(regPlaceDB.getSavedItems());
+                ((FragmentMainList) fragList).adapterMainList.setRegPlaceList(regPlaceDB.getSavedItems());
                 showFragmentList();
                 break;
             }
@@ -147,10 +149,22 @@ public class MainActivity extends AppCompatActivity implements InterfaceMainActi
                 showSettings();
                 break;
             }
-            case R.id.show_galary:{
+            case R.id.show_galary: {
                 showFragmentFotoList();
                 break;
             }
+            case R.id.play_music: {
+                Log.i(this.getClass().getName(),"startPlay music");
+                ServicePlayMusic servicePlayMusic=new ServicePlayMusic();
+                Intent intent=new Intent(this,ServicePlayMusic.class);
+                startService(intent);
+                //item.setEnabled(false);
+
+                break;
+            }
+            default:
+
+                super.onOptionsItemSelected(item);
 
 
         }

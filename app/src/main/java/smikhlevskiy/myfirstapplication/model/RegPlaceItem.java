@@ -1,10 +1,12 @@
 package smikhlevskiy.myfirstapplication.model;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
 
-import java.util.Date;
+import smikhlevskiy.myfirstapplication.threads.AsyncTaskImageLoader;
 
 /**
  * Created by tcont98 on 15-Sep-15.
@@ -30,7 +32,7 @@ public class RegPlaceItem implements Parcelable {
     private String country;
     private String comment;
 
-    private String uri="";
+    private String uri = "";
     private Bitmap bitmap = null;
 
     public static final Creator<RegPlaceItem> CREATOR = new Creator<RegPlaceItem>() {
@@ -79,7 +81,7 @@ public class RegPlaceItem implements Parcelable {
         country = in.readString();
         comment = in.readString();
         bitmap = in.readParcelable(Bitmap.class.getClassLoader());
-        uri =  in.readString();
+        uri = in.readString();
     }
 
     public String getName() {
@@ -153,5 +155,18 @@ public class RegPlaceItem implements Parcelable {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public void setImageViewBitmap(ImageView imageView, ContentResolver contextResolver) {
+        if (this.getBitmap() != null) {
+            imageView.setImageBitmap(this.getBitmap());
+
+        } else if (this.getUri().trim().length() > 0) {
+
+            AsyncTaskImageLoader asyncTaskImageLoader = new AsyncTaskImageLoader(imageView, contextResolver);
+            asyncTaskImageLoader.execute(this.getUri());
+
+
+        }
     }
 }

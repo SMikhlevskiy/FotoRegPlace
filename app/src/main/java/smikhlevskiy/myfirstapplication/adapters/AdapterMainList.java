@@ -2,8 +2,6 @@ package smikhlevskiy.myfirstapplication.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import smikhlevskiy.myfirstapplication.R;
-import smikhlevskiy.myfirstapplication.Util.SMikhlevskiyUtils;
-import smikhlevskiy.myfirstapplication.controllers.AsyncTaskImageLoader;
 import smikhlevskiy.myfirstapplication.model.RegPlaceItem;
 
 /**
  * Created by tcont98 on 21-Sep-15.
  */
-public class AdapterRegPlaceList extends BaseAdapter {
+public class AdapterMainList extends BaseAdapter {
 
 
     private ArrayList<RegPlaceItem> regPlaceList = new ArrayList();
@@ -60,7 +56,7 @@ public class AdapterRegPlaceList extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = lInflater.inflate(R.layout.item_regplacelist, parent, false);
+            convertView = lInflater.inflate(R.layout.main_list_item, parent, false);
             RegPlaceItem itemData = regPlaceList.get(position);
             TextView textViewAddress = (TextView) convertView.findViewById(R.id.adress);
             if (!sharedPreferences.getBoolean("pref_show_address", true))
@@ -83,7 +79,8 @@ public class AdapterRegPlaceList extends BaseAdapter {
                 textViewTime.setVisibility(View.VISIBLE);
             }
 
-
+            itemData.setImageViewBitmap((ImageView) convertView.findViewById(R.id.imageFoto),convertView.getContext().getContentResolver());
+            /*
             if (itemData.getBitmap() != null) {
                 ((ImageView) convertView.findViewById(R.id.imageFoto)).setImageBitmap(itemData.getBitmap());
                 Log.i("MainActivity", "Bitamp!!!!!");
@@ -93,7 +90,9 @@ public class AdapterRegPlaceList extends BaseAdapter {
                 AsyncTaskImageLoader asyncTaskImageLoader=new AsyncTaskImageLoader((ImageView) convertView.findViewById(R.id.imageFoto),convertView.getContext().getContentResolver());
                 asyncTaskImageLoader.execute(itemData.getUri());
                 //SMikhlevskiyUtils.grabImage(convertView.getContext(), (ImageView) convertView.findViewById(R.id.imageFoto), Uri.parse(itemData.getUri()));
+
             }
+            */
 
 
         }
@@ -128,7 +127,6 @@ public class AdapterRegPlaceList extends BaseAdapter {
 
 
         this.regPlaceList = regPlaceList;
-
 
 
     }

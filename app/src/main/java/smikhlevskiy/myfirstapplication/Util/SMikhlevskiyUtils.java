@@ -27,6 +27,7 @@ public abstract class SMikhlevskiyUtils {
     public static final String TIME_FORMAT_NOW = "HH:mm:ss";
     public static final int fullSizedFotoIntent = 1;
     public static final int smallFotoIntent = 2;
+    public static final String regFotoPlaceDBName="dbpafp2";
 
     public static String nowDate() {
         Calendar cal = Calendar.getInstance();

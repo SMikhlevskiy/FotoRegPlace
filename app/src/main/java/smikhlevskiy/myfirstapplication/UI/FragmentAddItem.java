@@ -123,6 +123,7 @@ public class FragmentAddItem extends Fragment {
             setBitmap(regPlaceItem.getBitmap());
             if (regPlaceItem.getUri().length() > 0) {
                 imageViewFoto.setImageBitmap(SMikhlevskiyUtils.loadBitmap(regPlaceItem.getUri(),masterActivity.getContentResolver()));
+                mImageUri = Uri.parse(regPlaceItem.getUri());
                 /*
                 mImageUri = Uri.parse(regPlaceItem.getUri());
                 SMikhlevskiyUtils.grabImage(masterActivity, imageViewFoto, mImageUri);

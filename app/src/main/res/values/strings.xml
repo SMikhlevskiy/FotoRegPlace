@@ -12,4 +12,5 @@
     <string name="nameMainActivityLog">MainActivity</string>
     <string name="regFotoSharedPreferencesName">rfp_sp</string>
     <string name="fotoGalary">Galary</string>
+    <string name="menuPlayMusic">PlayMusic</string>
 </resources>

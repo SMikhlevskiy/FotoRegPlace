@@ -1,4 +1,4 @@
-package smikhlevskiy.myfirstapplication.controllers;
+package smikhlevskiy.myfirstapplication.threads;
 
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
